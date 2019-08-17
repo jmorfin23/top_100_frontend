@@ -1,0 +1,14 @@
+.btn {
+  text-align: center;
+  width: 30%;
+  height: 50px;
+  margin-top: 50px;
+}
+.btn-danger {
+  background-color: #73020d;
+  border-color: white;
+}
+.btn-danger:hover {
+  background-color: #73020d;
+  opacity: 0.8;
+}
