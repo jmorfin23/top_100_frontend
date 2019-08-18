@@ -1,0 +1,13 @@
+.text {
+  background-color: #00BFFF;
+  text-decoration: none;
+  text-align: left;
+  padding: 5px;
+  margin: 8px;
+  border-radius: 8px;
+}
+
+li {
+  display:inline-block;
+
+}

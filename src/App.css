@@ -3,26 +3,3 @@ body {
   margin: 0px;
   padding: 0px;
 }
-.heading {
-  text-align: center;
-  margin-top: 35px;
-  font-size: 45px;
-  color: white;
-}
-
-main {
-  text-align: center;
-}
-
-img {
-  height: 260px;
-  width: 260px;
-}
-
-#myvideo {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  mid-width: 100%;
-  min-height: 100%; 
-}

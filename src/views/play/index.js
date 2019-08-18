@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import './App.css';
-import Button from './components/button';
-import Player from './components/player';
+import './index.css';
+import Button from '../../components/button';
+import Player from '../../components/player';
 // import Gif from './components/gif';
-import audio_wave from './audio_wave.jpg';
+import audio_wave from '../../audio_wave.jpg';
 // import myvideo from './background_video.mp4';
-
-
+// import myvideo from '../../sample.mp4';
+import Form from '../../components/form';
 
 class Play extends Component {
 
@@ -88,37 +88,66 @@ class Play extends Component {
     //
     //   }
     // }
+
+    //propt the user to guess which number
+
+    console.log(this.state.list);
+  }
+
+  guessRanking = async(e) => {
+    e.preventDefault()
+    console.log(e);
+    console.log('inside guessRanking');
   }
 //set the state too many times change this
   render() {
   return (
     <div className="player">
 
+  {/*<div className='video'>
+    <video id="background-video" loop autoPlay>
+      <source src={myvideo} type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>*/}
+
       {/*<video autoplay muted loop id="myvideo">
         <source src={myvideo} type='video/mp4' />
       </video>*/}
-      <header className="header">
-        <h1 className="heading">Top 100 Songs</h1>
-      </header>
-      <main>
+      {/*<div className="outer-container">*/}
 
-        <div className="main">
-          <Button getData={this.getData} />
+        <div className="header">
+          <h1 className="heading">Top 100 Songs</h1>
         </div>
 
-        <div>
-          <Player mp3={this.state.mp3}/>
-        </div>
+        <div className="row">
+          <div className="col-md-4 offset-md-4 col-lg-6 offset-lg-3">
+            <div className="main">
+              <Button getData={this.getData} />
+            </div>
 
-        <div>
-          <img src={audio_wave}></img>
-        </div>
+            <div>
+              <Player mp3={this.state.mp3}/>
+            </div>
 
+            <div>
+              <img src={audio_wave}></img>
+            </div>
 
-      </main>
-    </div>
+            <div className="row">
+              <div className="col-md-4 offset-md-4 col-sm-4 offset-sm-4 col-4 offset-4">
+              <Form getRanking={this.getRanking}/>
+              </div>
+            </div>
+
+          </div> {/* end of col */}
+        </div> {/* end of row */}
+
+      </div> //end of player
+
+    // </div>
   );
 }
 }
 
-export default Player;
+export default Play;

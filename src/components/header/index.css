@@ -1,0 +1,9 @@
+.navbar-brand {
+  color: #73020d;
+}
+
+/* set the tab bars so when hovering links are underlined */
+/* a.navbar-brand: hover {
+  text-decoration: underline;
+  color: white;
+} */
