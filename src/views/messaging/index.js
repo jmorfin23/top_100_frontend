@@ -5,11 +5,35 @@ import Input from '../../components/input'
 
 
 class Messaging extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      'message': []
+    }
+  }
+
+  sendMessage = async(e) => {
+    e.preventDefault()
+
+    let message = e.target.elements.message.value;
+
+    const messages = this.state.message
+
+    messages.push({
+      'text': message,
+      'username': 'jonm23'
+    }) 
+    // set the state
+    this.setState({ 'message': messages });
+
+  }
+
   render() {
   return (
     <div className="messaging">
-      <Display />
-      <Input />
+      <Display message={this.state.message}/>
+      <Input sendMessage={this.sendMessage}/>
     </div>
   );
 }

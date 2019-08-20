@@ -1,15 +1,22 @@
 import React, {Component} from 'react';
 import './index.css';
+import Message from '../message';
 
+function Messages(props) {
 
-class Messages extends Component {
-  render() {
   return (
-      <li className="message">
-        <div className="text">test message!</div>
-      </li>
+      <ul className="messages-ul">
+      {
+        props.message &&
+          props.message.map(m =>
+            <Message
+            message={m}
+            />
+          )
+      }
+      </ul>
   );
 }
-}
+
 
 export default Messages;

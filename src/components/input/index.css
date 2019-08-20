@@ -1,6 +1,17 @@
-.input {
-  padding: 05px;
+input {
+  padding: 5px;
   font-size: 11px;
   flex-grow: 1;
   margin-top: 5px;
+  flex-direction: row;
+  display: flex;
+  width: 100%; 
+}
+
+.one {
+  flex: 1;
+}
+
+.two {
+  flex: 1;
 }
