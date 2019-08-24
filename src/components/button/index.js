@@ -4,7 +4,9 @@ import './index.css';
 
 function Button(props) {
   return (
+      <div className='button'>
       <button onClick={props.getData} className="btn btn-danger">Play</button>
+      </div>
   );
 }
 

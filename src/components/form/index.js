@@ -5,12 +5,10 @@ import './index.css';
 function Form(props) {
   return (
     <div className="form">
-    <form onSubmit={props.getRanking}>
+    <form onSubmit={props.guessRanking}>
       <div className="form-group">
-        <label></label>
-        <input type="number" className="form-control" name="ranking" placeholder="Guess the song ranking." />
+        <input type="number" className="form-control" name="ranking" placeholder="Guess song rank" />
       </div>
-      <button type="submit" className="btn btn-primary" name="sumbit">Go!</button>
     </form>
     </div>
   );

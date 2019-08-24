@@ -1,4 +1,24 @@
 
 .form {
-  margin-top: 25px; 
+  margin-top: 25px;
+}
+.form > form {
+  display: flex;
+  text-align: center;
+  width: 100%;
+}
+.form > form >.form-group {
+  flex: 3;
+  margin: 0px;
+  margin-top: 0px;
+}
+.form > form >.form-group > input {
+  margin: 0px;
+}
+
+.form > form > .btn {
+  flex: 1;
+  padding: 0;
+  border: none;
+  margin-left: 2px;
 }

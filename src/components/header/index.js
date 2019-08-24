@@ -3,12 +3,13 @@ import './index.css';
 import {NavLink} from 'react-router-dom';
 
 
-function Header() {
+function Header(props) {
   return (
     <header className="Header">
-      <nav className="navbar navbar-black bg-black">
-        <NavLink to='/' className="navbar-brand">Play</NavLink>
-        <NavLink to='/messaging' className="navbar-brand">Messaging</NavLink>
+      <nav className="mynav navbar-black bg-black">
+        <NavLink to='/' className="add-padding navbar-brand" id="extra-margin-left">Play</NavLink>
+        <span id="total"><p>Points: {props.points}</p></span>
+        <NavLink to='/messaging' className="add-padding navbar-brand" id="float-right">Messaging</NavLink>
       </nav>
     </header>
   );
