@@ -7,9 +7,11 @@ import audio_wave from '../../audio_wave.jpg';
 // import myvideo from './background_video.mp4';
 // import myvideo from '../../sample.mp4';
 import Form from '../../components/form';
+import Popup from '../../components/popup';
+
+//TODO: problem with song #51 typeof is the same, strings seem the same ?
 
 class Play extends Component {
-
 
   constructor() {
     super();
@@ -17,11 +19,16 @@ class Play extends Component {
     this.increment = 0;
 
     this.state = {
+    showPopup: false,
     'mp3': '',
     'song': {artist: '', title: ''},
     'song_rank': 0,
     'number_of_guesses': 0
-    }
+    };
+  }
+
+  togglePopup() {
+    this.setState({ showPopup: !this.state.showPopup});
   }
 
   getData = async() => {
@@ -93,6 +100,7 @@ class Play extends Component {
     // //check if song is in artists, if so take song ID
     for (let j in data2) {
       if (song_name.toLowerCase() == data2[j]['title'].toLowerCase() | song_name.toLowerCase() == data2[j]['title_short'].toLowerCase()) {
+        console.log('this is a test');
         song_file = data2[j]['preview'];
       break;
     }
@@ -131,6 +139,7 @@ class Play extends Component {
     }
     console.log(this.state.song);
     console.log(this.state.mp3);
+    this.increment = 0;
     //////********************************////////////
 
   }
@@ -145,12 +154,19 @@ class Play extends Component {
     this.increment = this.increment += 1
     //check number of guess user has made for a one song
     this.setState({ 'number_of_guesses': this.increment})
-
+    console.log(this.increment + ' is increment');
     let guess = e.target.elements.ranking.value
 
+    if (this.increment >= 4) {
+       alert('Press Play to hear a new song, you\'ve exhausted all your guesses or already answered correctly.');
+       return;
+     }
+
     if (guess == this.state.song_rank) {
-      alert('You answered correctly! You gained 100 points!');
-      this.props.updateState(100)
+      alert(`You answered correctly! You gained 100 points! The song, ${this.state.song.title} by ${this.state.song.artist} is rank  ${this.state.song_rank} on the Billboard Charts. Press \'Play\' to hear a new song.`);
+      this.props.updateState(100);
+      this.increment = 3;
+      return;
     } else {
       let closeness = Math.abs(guess - this.state.song_rank)
       if (closeness <= 5) {
@@ -158,16 +174,16 @@ class Play extends Component {
         this.props.updateState(20)
       } else if (closeness <= 10) {
         alert('You guessed within 10 ranks away, you gain 5 points!');
-        this.props.updateState(50)
+        this.props.updateState(5)
       } else {
-        if (this.increment == 3) {
-          alert(`You've ran out of guesses. The song, ${this.state.song.title} by ${this.state.song.artist} is rank  ${this.state.song_rank} on the Billboard Charts. You gain 0 points.`);
-        } else {
           alert(`Sorry, you are not even close. Guess again.`);
+        }
+        if (this.increment >= 3) {
+          alert(`You've use all of your guesses. The song, ${this.state.song.title} by ${this.state.song.artist} is rank  ${this.state.song_rank} on the Billboard Charts.`);
         }
       }
     }
-  }
+
 
   render() {
   return (
@@ -203,7 +219,11 @@ class Play extends Component {
               <div className="col-md-4 offset-md-4 col-sm-4 offset-sm-4 col-4 offset-4">
               <Form guessRanking={this.guessRanking}/>
               </div>
-              <p id='info'>&#9432;</p>
+              <a onClick={this.togglePopup.bind(this)} id='info'>&#9432;</a>
+              {this.state.showPopup ?
+              <Popup text='Click "Close Button" to hide popup'
+          closePopup={this.togglePopup.bind(this)} /> : null
+        }
             </div> {/* end of row */}
           </div> {/* end of col */}
         </div> {/* end of row */}

@@ -32,9 +32,10 @@ img {
 } */
 #info {
   position: fixed;
-  bottom: 3px;
+  bottom: 18px;
   right: 12px;
   height: 10px;
+  cursor: pointer; 
 }
 
 /* .video {
