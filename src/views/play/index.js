@@ -13,7 +13,7 @@ import Popup from '../../components/popup';
 
 class Play extends Component {
 
-  constructor() {
+  constructor( props ) {
     super();
 
     this.increment = 0;
@@ -25,6 +25,9 @@ class Play extends Component {
     'song_rank': 0,
     'number_of_guesses': 0
     };
+
+    props.toggleHeader();
+    props.toggleSongs();
   }
 
   togglePopup() {
@@ -47,7 +50,7 @@ class Play extends Component {
     let song_artist = '';
     let regexd_song_artist = '';
     let random_num = Math.floor(Math.random() * 99)
-
+    random_num = 14
     console.log(random_num);
     //set state for song rank
     this.setState({ 'song_rank': random_num + 1})
@@ -55,7 +58,6 @@ class Play extends Component {
     //take song name and artist
     for (let i in data) {
       if (random_num == i){
-
       song_artist = data[i]['artist'];
       song_name = data[i]['title'];
      }
@@ -64,6 +66,7 @@ class Play extends Component {
     if (song_name == 'Ran$om' | song_name == 'ran$om') {
       song_name = 'Ransom'
     }
+
     console.log(song_artist);
     console.log(song_name);
 
@@ -97,18 +100,46 @@ class Play extends Component {
     data2 = data2.data; //data2 is the artists songs
 
     let song_file = '';
-    // //check if song is in artists, if so take song ID
+
+    //check if song includes (
+    if (song_name.includes('(')) {
+      console.log('inside (');
+      song_name = song_name.split('(');
+      song_name = song_name[0]
+      song_name = song_name.trim();
+    }
+
+
+    //checking apostrophes in song name.
+    for (let u in song_name) {
+      if (song_name[u] == "'" | song_name[u] == "`" | song_name[u] == "’") {
+        song_name = song_name.replace(song_name[u], '');
+    }
+    }
+
+      //check if song is in artists, if so take son
     for (let j in data2) {
+      //check if returned songname inclues apostrophes, if so deleted
+      for (let v in data2[j]['title']) {
+        if (data2[j]['title'][v] == "'" | data2[j]['title'][v] == "`" | data2[j]['title'][v] == "’") {
+          data2[j]['title'] = data2[j]['title'].replace(data2[j]['title'][v], '');
+          break;
+        }
+      }
+      console.log(song_name + " mine");
+      console.log(data2[j]['title']);
       if (song_name.toLowerCase() == data2[j]['title'].toLowerCase() | song_name.toLowerCase() == data2[j]['title_short'].toLowerCase()) {
-        console.log('this is a test');
-        song_file = data2[j]['preview'];
+        console.log('test2');
+        console.log('this should hit');
+      song_file = data2[j]['preview'];
       break;
     }
-    }
+  }
+
     if (song_file) {
       this.setState({ 'mp3': song_file });
     } else {
-
+      console.log('this should print 3');
       let URL3 = `https://deezerdevs-deezer.p.rapidapi.com/search?q=${song_name}`;
       let response2 = await fetch(URL3, {
         'method': 'GET',
@@ -120,7 +151,8 @@ class Play extends Component {
 
       let data3 = await response2.json();
       data3 = data3.data; //data3 is the artists songs
-
+      console.log(data3);
+      console.log(song_name);
       for (let i in data3) {
         if (data3[i]['title'].toLowerCase() == song_name.toLowerCase() | data3[i]['title_short'].toLowerCase() == song_name.toLowerCase()) {
           song_file = data3[i]['preview'];
@@ -163,7 +195,7 @@ class Play extends Component {
      }
 
     if (guess == this.state.song_rank) {
-      alert(`You answered correctly! You gained 100 points! The song, ${this.state.song.title} by ${this.state.song.artist} is rank  ${this.state.song_rank} on the Billboard Charts. Press \'Play\' to hear a new song.`);
+      alert(`You answered correctly! You gained 100 points! The song, ${this.state.song.title} by ${this.state.song.artist} is rank  ${this.state.song_rank} on the Billboard Charts. Press 'Play' to hear a new song.`);
       this.props.updateState(100);
       this.increment = 3;
       return;
@@ -179,7 +211,7 @@ class Play extends Component {
           alert(`Sorry, you are not even close. Guess again.`);
         }
         if (this.increment >= 3) {
-          alert(`You've use all of your guesses. The song, ${this.state.song.title} by ${this.state.song.artist} is rank  ${this.state.song_rank} on the Billboard Charts.`);
+          alert(`You've use all of your guesses. The song, ${this.state.song.title} by ${this.state.song.artist} is rank ${this.state.song_rank} on the Billboard Charts.`);
         }
       }
     }

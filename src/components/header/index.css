@@ -22,3 +22,7 @@
 span > p {
   display: inline;
 }
+
+.className {
+  float: left; 
+}

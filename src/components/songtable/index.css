@@ -1,0 +1,11 @@
+.centered {
+  text-align: center;
+}
+.extra-margin-top {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.table td, .table th {
+  border-top: 5px solid #32383e;
+}

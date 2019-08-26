@@ -5,12 +5,14 @@ import Input from '../../components/input'
 
 
 class Messaging extends Component {
-  constructor() {
+  constructor( props ) {
     super();
 
     this.state = {
       'message': []
     }
+    props.toggleHeader();
+    props.toggleSongs();
   }
 
   sendMessage = async(e) => {
@@ -23,7 +25,7 @@ class Messaging extends Component {
     messages.push({
       'text': message,
       'username': 'jonm23'
-    }) 
+    })
     // set the state
     this.setState({ 'message': messages });
 

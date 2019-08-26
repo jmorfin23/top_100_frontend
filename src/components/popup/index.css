@@ -6,6 +6,7 @@
   text-align: center;
   padding: 20px;
   font-family: serif;
+  overflow-y: scroll; 
   top: 0;
   left: 0;
   right: 0;
@@ -24,7 +25,7 @@
   background: white;
 }
 .popup h1 {
-  color: red; 
+  color: red;
   margin-bottom: 15px;
 }
 
