@@ -34,34 +34,74 @@ class Play extends Component {
     this.setState({ showPopup: !this.state.showPopup});
   }
 
+  checkArtist = (song_artist) => {
+    //Regexing for &, Featuring, and ','
+    if (song_artist.includes(',') ) {
+      return song_artist.split(',');
+    } else if (song_artist.includes('Featuring')) {
+      return song_artist.split('Featuring');
+    } else if (song_artist.includes('featuring')) {
+      return song_artist.split('featuring');
+    } else if (song_artist.includes('&')) {
+      return song_artist.split('&');
+    }
+  }
+  checkParenthesee = (song_name) => {
+    //check if song includes '('
+    if (song_name.includes('(')) {
+      console.log('inside (');
+      song_name = song_name.split('(');
+      return song_name[0].trim();
+    }
+    return song_name;
+  }
+  checkApostrophes = (song_name) => {
+    console.log('inside check apostrophes');
+    for (let u in song_name) {
+      if (song_name[u] == "'" | song_name[u] == "`" | song_name[u] == "’") {
+        return song_name.replace(song_name[u], '');
+    }
+    }
+    return song_name;
+  }
+  compareSongs = (song_name, song_from_api__filtered, song_from_api__short_title) => {
+    if (song_name.toLowerCase() == song_from_api__filtered.toLowerCase() | song_name.toLowerCase() == song_from_api__short_title.toLowerCase()) {
+      return true;
+    }
+    return false;
+  }
+
+  //issues with songs 42
   getData = async() => {
 
     //Grab top 100 list from own API in routes.py
-    let URL = 'http://127.0.0.1:5000/api/retrieve';
+    let URL = 'http://localhost:5000/api/retrieve';
     let response = await fetch(URL);
     let data = await response.json();
-    data = data.Success.data
-    console.log(data);
     //set the state for the data
-    this.setState({ 'list': data })
+    this.setState({ 'list': data.Success })
+    console.log(this.state.list);
 
     //send artist / song names to match song
     let song_name = '';
     let song_artist = '';
     let regexd_song_artist = '';
-    let random_num = Math.floor(Math.random() * 99)
-    random_num = 14
+    let random_num = Math.ceil(Math.random() * 100)
+
     console.log(random_num);
     //set state for song rank
-    this.setState({ 'song_rank': random_num + 1})
 
     //take song name and artist
-    for (let i in data) {
+    for (let i in this.state.list) {
       if (random_num == i){
-      song_artist = data[i]['artist'];
-      song_name = data[i]['title'];
+        song_artist = this.state.list[i]['artist'];
+        song_name = this.state.list[i]['title'];
+        //set the state for song and artist for guessing
+        this.setState({ 'song': { artist: song_artist, title: song_name}})
+        this.setState({ 'song_rank': this.state.list[i]['rank']})
      }
     }
+
     //an issue with the song name 'Ran$om' because of the $ this takes care of it.
     if (song_name == 'Ran$om' | song_name == 'ran$om') {
       song_name = 'Ransom'
@@ -70,21 +110,14 @@ class Play extends Component {
     console.log(song_artist);
     console.log(song_name);
 
-    //Regexing for &, Featuring, and ','
-    if (song_artist.includes(',') ) {
-      regexd_song_artist = song_artist.split(',');
-    } else if (song_artist.includes('Featuring')) {
-      regexd_song_artist = song_artist.split('Featuring');
-    } else if (song_artist.includes('featuring')) {
-      regexd_song_artist = song_artist.split('featuring');
-    } else if (song_artist.includes('&')) {
-      regexd_song_artist = song_artist.split('&');
-    }
-
-    // //call api to search for artist to get song ID.
+    regexd_song_artist = this.checkArtist(song_artist);
+    console.log(regexd_song_artist);
+    //call api to search for artist to get song ID.
     let URL2 = '';
     if (regexd_song_artist) {
       URL2 = `https://deezerdevs-deezer.p.rapidapi.com/search?q=${regexd_song_artist[0]}`;
+      console.log('***** inside regexed song artist *****');
+      song_artist = regexd_song_artist[0];
   } else {
     URL2 = `https://deezerdevs-deezer.p.rapidapi.com/search?q=${song_artist}`;
   }
@@ -98,48 +131,43 @@ class Play extends Component {
     });
     let data2 = await response2.json();
     data2 = data2.data; //data2 is the artists songs
-
+    console.log(data2);
     let song_file = '';
-
-    //check if song includes (
-    if (song_name.includes('(')) {
-      console.log('inside (');
-      song_name = song_name.split('(');
-      song_name = song_name[0]
-      song_name = song_name.trim();
-    }
-
+    let song_from_api__filtered = ''
+    //check if song name includes parenthesees
+    song_name = this.checkParenthesee(song_name);
 
     //checking apostrophes in song name.
-    for (let u in song_name) {
-      if (song_name[u] == "'" | song_name[u] == "`" | song_name[u] == "’") {
-        song_name = song_name.replace(song_name[u], '');
-    }
-    }
+    song_name = this.checkApostrophes(song_name);
 
-      //check if song is in artists, if so take son
+
     for (let j in data2) {
-      //check if returned songname inclues apostrophes, if so deleted
-      for (let v in data2[j]['title']) {
-        if (data2[j]['title'][v] == "'" | data2[j]['title'][v] == "`" | data2[j]['title'][v] == "’") {
-          data2[j]['title'] = data2[j]['title'].replace(data2[j]['title'][v], '');
-          break;
-        }
+      //check if parenthesees are in songname from api
+      song_from_api__filtered = this.checkParenthesee(data2[j]['title']);
+      //check if apostrophes are in songname from api
+      song_from_api__filtered = this.checkApostrophes(song_from_api__filtered);
+
+      //take short title:
+
+      let song_from_api__short_title = this.checkParenthesee(data2[j]['title_short']);
+
+      song_from_api__short_title = this.checkApostrophes(data2[j]['title_short']);
+
+      let result = this.compareSongs(song_name, song_from_api__filtered, song_from_api__short_title);
+
+      //take songfile if songs are equal
+      if (result) {
+        console.log(song_artist);
+        console.log('Success, song file aquired');
+        console.log(song_name + ' by ' + song_artist + " is equal to " + song_from_api__filtered + " by " + data2[j]['artist']['name'] );
+        this.setState({ 'mp3': data2[j]['preview'] });
+        break;
       }
-      console.log(song_name + " mine");
-      console.log(data2[j]['title']);
-      if (song_name.toLowerCase() == data2[j]['title'].toLowerCase() | song_name.toLowerCase() == data2[j]['title_short'].toLowerCase()) {
-        console.log('test2');
-        console.log('this should hit');
-      song_file = data2[j]['preview'];
-      break;
-    }
   }
 
-    if (song_file) {
-      this.setState({ 'mp3': song_file });
-    } else {
-      console.log('this should print 3');
+    if (!(this.state.mp3)) {
+      console.log('** song file was not aquired by the artist api sending to the song search api **');
+
       let URL3 = `https://deezerdevs-deezer.p.rapidapi.com/search?q=${song_name}`;
       let response2 = await fetch(URL3, {
         'method': 'GET',
@@ -152,25 +180,33 @@ class Play extends Component {
       let data3 = await response2.json();
       data3 = data3.data; //data3 is the artists songs
       console.log(data3);
-      console.log(song_name);
       for (let i in data3) {
-        if (data3[i]['title'].toLowerCase() == song_name.toLowerCase() | data3[i]['title_short'].toLowerCase() == song_name.toLowerCase()) {
-          song_file = data3[i]['preview'];
 
-          //set the state for song mp3 file, and song
-          this.setState({ 'mp3': song_file });
+        let song_from_api__filtered = this.checkParenthesee(data2[i]['title']);
+
+        song_from_api__filtered = this.checkApostrophes(song_from_api__filtered);
+
+        let song_from_api__short_title = this.checkParenthesee(data3[i]['title_short']);
+
+        song_from_api__short_title = this.checkApostrophes(data3[i]['title_short']);
+
+        let result = this.compareSongs(song_name, song_from_api__filtered, song_from_api__short_title);
+
+        if (result) {
+          console.log('Success, song file aquired in search song');
+          console.log(song_name + ' by ' + song_artist + " is equal to " + song_from_api__filtered + " by " + data2[i]['artist']['name'] );
+          this.setState({ 'mp3': data3[i]['preview'] });
           break;
         }
       }
     }
     //set song state if song_artist name was regexed or not
-    if (regexd_song_artist) {
-      this.setState({ 'song': { artist: regexd_song_artist[0], title: song_name}})
-    } else {
-      this.setState({ 'song': { artist: song_artist, title: song_name}})
-    }
+    // if (regexd_song_artist) {
+    //   this.setState({ 'song': { artist: regexd_song_artist[0], title: song_name}})
+    // } else {
+    //   this.setState({ 'song': { artist: song_artist, title: song_name}})
+    // }
     console.log(this.state.song);
-    console.log(this.state.mp3);
     this.increment = 0;
     //////********************************////////////
 

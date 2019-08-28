@@ -21,11 +21,11 @@ class Songs extends Component {
     let URL = 'http://127.0.0.1:5000/api/retrieve';
     let response = await fetch(URL);
     let data = await response.json();
-    data = data.Success.data
-    console.log(data);
+    data = data.Success
     //set the state for the data
     this.setState({ 'song_list': data })
-    
+    console.log(data);
+
   }
 
   componentDidMount() {

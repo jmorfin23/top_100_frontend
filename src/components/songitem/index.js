@@ -9,6 +9,7 @@ function SongItem(props) {
         <td>{props.index}</td>
         <td>{props.song.title}</td>
         <td>{props.song.artist}</td>
+        <td><img src={props.song.image} alt="Placehold" /></td>
       </tr>
   );
 
