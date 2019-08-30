@@ -26,6 +26,7 @@ img {
   height: 260px;
   width: 260px;
   margin-top: 25px;
+  image-rendering: pixelated;
 }
 /* .relative {
   position: relative;
@@ -35,7 +36,7 @@ img {
   bottom: 18px;
   right: 12px;
   height: 10px;
-  cursor: pointer; 
+  cursor: pointer;
 }
 
 /* .video {

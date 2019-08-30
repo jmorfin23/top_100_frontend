@@ -1,4 +1,6 @@
 td img {
   width: 72px;
-  height: 72px; 
+  height: 72px;
+  image-rendering: pixelated;
+  margin: auto;
 }

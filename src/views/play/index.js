@@ -26,8 +26,7 @@ class Play extends Component {
     'number_of_guesses': 0
     };
 
-    props.toggleHeader();
-    props.toggleSongs();
+    props.toggleHeader(1);
   }
 
   togglePopup() {
@@ -71,7 +70,17 @@ class Play extends Component {
     return false;
   }
 
-  //issues with songs 42
+  compareSongs2 = (song_name, song_from_api__filtered, song_from_api__short_title, song_artist, artist_from_api) => {
+    console.log('inside compare songs 2');
+    if (song_name.toLowerCase() == song_from_api__filtered.toLowerCase() | song_name.toLowerCase() == song_from_api__short_title.toLowerCase()) {
+      if (song_artist == artist_from_api) {
+        console.log(`${song_artist} is equal to ${artist_from_api}`);
+        return true;
+      }
+    }
+    return false;
+  }
+  //issues with songs 42, 54, 91
   getData = async() => {
 
     //Grab top 100 list from own API in routes.py
@@ -94,8 +103,8 @@ class Play extends Component {
     //take song name and artist
     for (let i in this.state.list) {
       if (random_num == i){
-        song_artist = this.state.list[i]['artist'];
-        song_name = this.state.list[i]['title'];
+        song_artist = this.state.list[i]['artist'].trim();
+        song_name = this.state.list[i]['title'].trim();
         //set the state for song and artist for guessing
         this.setState({ 'song': { artist: song_artist, title: song_name}})
         this.setState({ 'song_rank': this.state.list[i]['rank']})
@@ -117,7 +126,7 @@ class Play extends Component {
     if (regexd_song_artist) {
       URL2 = `https://deezerdevs-deezer.p.rapidapi.com/search?q=${regexd_song_artist[0]}`;
       console.log('***** inside regexed song artist *****');
-      song_artist = regexd_song_artist[0];
+      song_artist = regexd_song_artist[0].trim();
   } else {
     URL2 = `https://deezerdevs-deezer.p.rapidapi.com/search?q=${song_artist}`;
   }
@@ -132,6 +141,7 @@ class Play extends Component {
     let data2 = await response2.json();
     data2 = data2.data; //data2 is the artists songs
     console.log(data2);
+    console.log(song_artist + 'test');
     let song_file = '';
     let song_from_api__filtered = ''
     //check if song name includes parenthesees
@@ -182,7 +192,7 @@ class Play extends Component {
       console.log(data3);
       for (let i in data3) {
 
-        let song_from_api__filtered = this.checkParenthesee(data2[i]['title']);
+        let song_from_api__filtered = this.checkParenthesee(data3[i]['title']);
 
         song_from_api__filtered = this.checkApostrophes(song_from_api__filtered);
 
@@ -190,7 +200,7 @@ class Play extends Component {
 
         song_from_api__short_title = this.checkApostrophes(data3[i]['title_short']);
 
-        let result = this.compareSongs(song_name, song_from_api__filtered, song_from_api__short_title);
+        let result = this.compareSongs2(song_name, song_from_api__filtered, song_from_api__short_title, song_artist, data3[i]['artist']['name']);
 
         if (result) {
           console.log('Success, song file aquired in search song');
@@ -244,7 +254,9 @@ class Play extends Component {
         alert('You guessed within 10 ranks away, you gain 5 points!');
         this.props.updateState(5)
       } else {
-          alert(`Sorry, you are not even close. Guess again.`);
+          let msg = ''
+          guess > this.state.song_rank ? msg = 'Your guess is greater than the songs rank. ' : msg = 'Your guess is less than the songs rank.'
+          alert(`Sorry, you are not even close. ${msg} Guess again.`);
         }
         if (this.increment >= 3) {
           alert(`You've use all of your guesses. The song, ${this.state.song.title} by ${this.state.song.artist} is rank ${this.state.song_rank} on the Billboard Charts.`);

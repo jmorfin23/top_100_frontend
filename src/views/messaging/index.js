@@ -1,44 +1,71 @@
-import React, {Component} from 'react';
+import React, {Component} from "react";
 import './index.css';
-import Display from '../../components/display'
-import Input from '../../components/input'
-
+import DisplayMessage from "../../components/displayMessage";
+import Input from "../../components/input"
 
 class Messaging extends Component {
-  constructor( props ) {
+  constructor(props) {
     super();
 
+
     this.state = {
-      'message': []
-    }
-    props.toggleHeader();
-    props.toggleSongs();
+      messages: [],
+      member: {
+        username: 'jonsmith',
+        color: 'red',
+        id: 0
+      }
+    }  
+    props.toggleHeader(2);
+
+    this.drone = new window.Scaledrone("1QKwbjduKYTesXml", {
+      data: this.state.member
+      });
+    this.drone.on('open', error => {
+      if (error) {
+        return console.error(error);
+      }
+      const member = {...this.state.member};
+      console.log('test');
+      console.log(member + 'this is a test!');
+      member.id = this.drone.clientId;
+
+      this.setState({member});
+    });
+
+
+    const room = this.drone.subscribe("observable-room");
+
+    room.on('data', (data, member) => {
+      const messages = this.state.messages;
+      messages.push({member, text: data});
+      this.setState({messages});
+    });
+
+
   }
 
-  sendMessage = async(e) => {
-    e.preventDefault()
-
-    let message = e.target.elements.message.value;
-
-    const messages = this.state.message
-
-    messages.push({
-      'text': message,
-      'username': 'jonm23'
-    })
-    // set the state
-    this.setState({ 'message': messages });
+  onSendMessage = (message) => {
+    this.drone.publish({
+    room: "observable-room",
+    message
+    });
 
   }
-
   render() {
-  return (
-    <div className="messaging">
-      <Display message={this.state.message}/>
-      <Input sendMessage={this.sendMessage}/>
-    </div>
-  );
-}
+    return (
+
+      <div className="App">
+        <DisplayMessage
+          messages={this.state.messages}
+          currentMember={this.state.member}
+        />
+        <Input
+         onSendMessage={this.onSendMessage}
+        />
+      </div>
+    );
+  }
 }
 
 export default Messaging;

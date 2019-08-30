@@ -10,10 +10,7 @@ class Songs extends Component {
       'song_list': [],
       }
 
-
-
-    props.toggleSongs(); // check syntax for this.
-    props.toggleHeader();
+    props.toggleHeader(3);
   }
 
   getBillboardList = async() => {
