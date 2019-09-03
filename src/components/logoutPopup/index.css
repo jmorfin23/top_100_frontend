@@ -1,0 +1,42 @@
+.popup {
+  position: fixed;
+  width: 65%;
+  height: 65%;
+  border-radius: 8px;
+  text-align: center;
+  padding: 20px;
+  font-family: serif;
+  overflow-y: scroll;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  background-color: white;
+}
+.popup\_inner {
+  position: absolute;
+  left: 25%;
+  right: 25%;
+  top: 25%;
+  bottom: 25%;
+  margin: auto;
+  border-radius: 20px;
+  background: white;
+}
+.popup h1 {
+  color: #73020d;
+  margin-bottom: 15px;
+}
+
+.popup p {
+  font-size: 20px
+}
+
+.popup button{
+  margin-top: 15px;
+  border-radius: 8px;
+}
+.make-bold {
+  font-weight: bold;
+}

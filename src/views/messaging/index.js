@@ -15,10 +15,11 @@ class Messaging extends Component {
     this.state = {
       messages: [],
       member: {
-        username: 'jonsmith',
+        username: props.username,
         color: 'red',
       }
     }
+  
     props.toggleHeader(2);
 
     this.drone = new window.Scaledrone("1QKwbjduKYTesXml", {

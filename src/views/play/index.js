@@ -8,8 +8,9 @@ import audio_wave from '../../audio_wave.jpg';
 // import myvideo from '../../sample.mp4';
 import Form from '../../components/form';
 import Popup from '../../components/popup';
+import LogoutPopup from '../../components/logoutPopup';
 
-//TODO: problem with song #51 typeof is the same, strings seem the same ?
+
 
 class Play extends Component {
 
@@ -20,6 +21,7 @@ class Play extends Component {
 
     this.state = {
     showPopup: false,
+    showLogout: false,
     'mp3': '',
     'song': {artist: '', title: ''},
     'song_rank': 0,
@@ -30,7 +32,10 @@ class Play extends Component {
   }
 
   togglePopup() {
-    this.setState({ showPopup: !this.state.showPopup});
+    this.setState({ showPopup: !this.state.showPopup });
+  }
+  toggleLogout() {
+    this.setState({ showLogout: !this.state.showLogout });
   }
 
   checkArtist = (song_artist) => {
@@ -80,7 +85,7 @@ class Play extends Component {
     }
     return false;
   }
-  //issues with songs 42, 54, 91
+  //issues with songs 77
   getData = async() => {
 
     //Grab top 100 list from own API in routes.py
@@ -95,7 +100,7 @@ class Play extends Component {
     let song_name = '';
     let song_artist = '';
     let regexd_song_artist = '';
-    let random_num = Math.ceil(Math.random() * 100)
+    let random_num = Math.ceil(Math.random() * 99)
 
     console.log(random_num);
     //set state for song rank
@@ -242,17 +247,17 @@ class Play extends Component {
 
     if (guess == this.state.song_rank) {
       alert(`You answered correctly! You gained 100 points! The song, ${this.state.song.title} by ${this.state.song.artist} is rank  ${this.state.song_rank} on the Billboard Charts. Press 'Play' to hear a new song.`);
-      this.props.updateState(100);
+      this.props.updatePoints(100);
       this.increment = 3;
       return;
     } else {
       let closeness = Math.abs(guess - this.state.song_rank)
       if (closeness <= 5) {
         alert('You guessed within 5 ranks away, you gain 20 points!');
-        this.props.updateState(20)
+        this.props.updatePoints(20)
       } else if (closeness <= 10) {
         alert('You guessed within 10 ranks away, you gain 5 points!');
-        this.props.updateState(5)
+        this.props.updatePoints(5)
       } else {
           let msg = ''
           guess > this.state.song_rank ? msg = 'Your guess is greater than the songs rank. ' : msg = 'Your guess is less than the songs rank.'
@@ -300,10 +305,13 @@ class Play extends Component {
               <Form guessRanking={this.guessRanking}/>
               </div>
               <a onClick={this.togglePopup.bind(this)} id='info'>&#9432;</a>
-              <a onClick='' id='logout'><i class="fa fa-sign-out" aria-hidden="true"></i></a>
+              <a onClick={this.toggleLogout.bind(this)} id='logout'><i className="fa fa-sign-out" aria-hidden="true"></i></a>
               {this.state.showPopup ?
               <Popup closePopup={this.togglePopup.bind(this)} /> : null
-        }
+              }
+              {this.state.showLogout ?
+                <LogoutPopup closelogoutPopup={this.toggleLogout.bind(this)} logoutUser={this.props.logoutUser}/> : null
+              }
             </div> {/* end of row */}
           </div> {/* end of col */}
         </div> {/* end of row */}

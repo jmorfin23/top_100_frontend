@@ -18,18 +18,40 @@ class App extends Component {
     this.state = {
       logged_in: false,
       'toggle': 0,
-      'points': 0
+      'points': 0,
+      'username': ''
     }
   }
-  updateState = async(points) => {
+
+
+  updatePoints = async(points) => {
     points = this.state.points += points
     this.setState({'points': points})
+
+    const URL = 'http://localhost:5000/update/points';
+    console.log(this.state.points);
+
+    let response = await fetch(URL, {
+      headers: {
+        'Content-Type': 'application/json',
+        'points': this.state.points,
+        'username': this.state.username
+      }
+    });
+    let data = await response.json();
+    console.log(data);
     return;
   }
 
   toggleHeader = async(num) => {
     console.log(num);
     this.setState({ 'toggle': num })
+  }
+
+  logoutUser = async() => {
+    alert('Come back soon!')
+    this.setState({ logged_in: !this.state.logged_in })
+    this.props.history.push('/login');
   }
 
   handleLogin = async(e) => {
@@ -61,7 +83,8 @@ class App extends Component {
     // setup message saying registered or error
     if (data.message === 'success') {
       this.setState({ logged_in: true });
-
+      this.setState({ 'points': data.points})
+      this.setState({ 'username': data.username})
       // set the token we receive into local storage
       localStorage.setItem('token', data.token);
 
@@ -81,12 +104,14 @@ class App extends Component {
 
     let email = e.target.elements.email.value;
     let password = e.target.elements.pass.value;
+    let username = e.target.elements.username.value;
 
     const URL = 'http://localhost:5000/api/register';
 
     // encrypt a token with the proper payload info to send to our api
+
     let token = jwt.sign(
-      { 'email': email, 'password': password },
+      { 'email': email, 'username': username, 'password': password },
       SECRET_KEY,
       { expiresIn: '1h' } // expires in 1 hour
     );
@@ -98,20 +123,23 @@ class App extends Component {
         'token': token,
       }
     });
+
     let data = await response.json();
     console.log(data);
     // setup message saying registered or error
     if (data.message === 'success') {
       this.setState({ logged_in: true });
-
+      this.setState({ 'points': data.points })
+      this.setState({ 'username': data.username })
       // set the token we receive into local storage
       localStorage.setItem('token', data.token);
 
       alert('You are now registered!');
+
       //pushes the user to the 'play' page
       this.props.history.push('/play');
     } else {
-      alert(data.message);
+      alert(data.Error);
     }
 
   }
@@ -123,8 +151,8 @@ class App extends Component {
       <Switch>
         <Route exact path={['/', '/login']} render={() => <Login handleLogin={this.handleLogin} />} />
         <Route exact path='/register' render={() => <Register handleRegister={this.handleRegister}/>} />
-        <Route exact path='/play' render={() => <Play toggleSongs={this.toggleSongs} toggleHeader={this.toggleHeader} updateState={this.updateState} points={this.state.points}/>} />
-        <Route exact path='/messaging' render={() => <Messaging toggleSongs={this.toggleSongs} toggleHeader={this.toggleHeader}/>} />
+        <Route exact path='/play' render={() => <Play logoutUser={this.logoutUser} toggleSongs={this.toggleSongs} toggleHeader={this.toggleHeader} updatePoints={this.updatePoints} points={this.state.points}/>} />
+        <Route exact path='/messaging' render={() => <Messaging username={this.state.username} toggleSongs={this.toggleSongs} toggleHeader={this.toggleHeader}/>} />
         <Route exact path='/songs' render={() => <Songs toggleHeader={this.toggleHeader} toggleSongs={this.toggleSongs} />}/>
       </Switch>
     </div>
