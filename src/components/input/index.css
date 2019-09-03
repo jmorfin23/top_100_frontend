@@ -1,4 +1,4 @@
-input {
+.Input > form > input {
   padding: 5px;
   font-size: 11px;
   flex-grow: 1;
@@ -6,12 +6,4 @@ input {
   flex-direction: row;
   display: flex;
   width: 100%;
-}
-
-.one {
-  flex: 1;
-}
-
-.two {
-  flex: 1;
 }

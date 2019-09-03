@@ -1,0 +1,16 @@
+.register-page > h1 {
+  margin-top: 40px;
+  text-align: center;
+  font-size: 40px;
+  color: white;
+}
+.register-page > .row > .col-md-4 > form > input {
+  margin-top: 25px;
+}
+
+.register-page > .row > .col-md-4 > form > .btn {
+  width: 100%;
+  cursor: pointer;
+  background-color: #73020d;
+  border: 1px solid #73020d;
+}

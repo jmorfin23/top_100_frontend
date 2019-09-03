@@ -39,6 +39,13 @@ img {
   cursor: pointer;
 }
 
+#logout {
+  position: fixed;
+  bottom: 18px;
+  left: 12px;
+  height: 10px;
+  cursor: pointer;
+}
 /* .video {
   position: fixed;
   z-index: -1;

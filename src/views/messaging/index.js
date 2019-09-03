@@ -37,7 +37,7 @@ class Messaging extends Component {
       member.id = this.drone.clientId;
 
       const room = this.drone.subscribe("observable-room");
-      
+
       room.on('data', (data, member) => {
         messages.push({member, text: data});
         this.setState({messages});
@@ -99,7 +99,7 @@ class Messaging extends Component {
   render() {
     return (
 
-      <div className="App">
+      <div className="messaging">
         <DisplayMessage
           messages={this.state.messages}
           currentMember={this.state.member}

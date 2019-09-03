@@ -300,9 +300,9 @@ class Play extends Component {
               <Form guessRanking={this.guessRanking}/>
               </div>
               <a onClick={this.togglePopup.bind(this)} id='info'>&#9432;</a>
+              <a onClick='' id='logout'><i class="fa fa-sign-out" aria-hidden="true"></i></a>
               {this.state.showPopup ?
-              <Popup text='Click "Close Button" to hide popup'
-          closePopup={this.togglePopup.bind(this)} /> : null
+              <Popup closePopup={this.togglePopup.bind(this)} /> : null
         }
             </div> {/* end of row */}
           </div> {/* end of col */}
