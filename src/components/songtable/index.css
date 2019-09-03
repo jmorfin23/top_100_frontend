@@ -9,3 +9,7 @@
 .table td, .table th {
   border-top: 5px solid #32383e;
 }
+.table {
+  margin-right: auto;
+  margin-left: auto;
+}

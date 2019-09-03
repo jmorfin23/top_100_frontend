@@ -8,8 +8,6 @@ import SongItem from '../songitem';
 function SongTable(props) {
 
   return (
-      <div className="row">
-        <div className="col-md-8 offset-md-2 col-sm-8 offset-sm-2 col-8 offset-1">
           <table className="table table-striped table-dark table-hover extra-margin-top">
           <thead className="thead-dark centered">
             <tr>
@@ -32,8 +30,6 @@ function SongTable(props) {
           }
           </tbody>
           </table>
-        </div>
-      </div>
   );
 
 }

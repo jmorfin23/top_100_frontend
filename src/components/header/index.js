@@ -34,7 +34,7 @@ function Header(props) {
         }
         {
           (props.toggle == 3 && props.logged_in) &&
-            <NavLink to='/messaging' className="add-padding navbar-brand" id="float-left">Messaging</NavLink>
+            <NavLink to='/messaging' className="add-padding navbar-brand">Messaging</NavLink>
         }
       </nav>
     </header>

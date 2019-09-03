@@ -77,15 +77,20 @@ class Play extends Component {
 
   compareSongs2 = (song_name, song_from_api__filtered, song_from_api__short_title, song_artist, artist_from_api) => {
     console.log('inside compare songs 2');
+    console.log(song_artist);
     if (song_name.toLowerCase() == song_from_api__filtered.toLowerCase() | song_name.toLowerCase() == song_from_api__short_title.toLowerCase()) {
       if (song_artist == artist_from_api) {
         console.log(`${song_artist} is equal to ${artist_from_api}`);
         return true;
       }
+      //last condition
+      if (song_name.toLowerCase() == song_from_api__filtered.toLowerCase()){
+        return true;
+      }
     }
     return false;
   }
-  //issues with songs 77
+  //issues with song 77 (this issue is fixed)
   getData = async() => {
 
     //Grab top 100 list from own API in routes.py
@@ -101,7 +106,7 @@ class Play extends Component {
     let song_artist = '';
     let regexd_song_artist = '';
     let random_num = Math.ceil(Math.random() * 99)
-
+    
     console.log(random_num);
     //set state for song rank
 
@@ -155,7 +160,7 @@ class Play extends Component {
     //checking apostrophes in song name.
     song_name = this.checkApostrophes(song_name);
 
-
+    // console.log(song_name + " is song name!!!!!!!!!");
     for (let j in data2) {
       //check if parenthesees are in songname from api
       song_from_api__filtered = this.checkParenthesee(data2[j]['title']);
@@ -194,6 +199,7 @@ class Play extends Component {
 
       let data3 = await response2.json();
       data3 = data3.data; //data3 is the artists songs
+      console.log(song_name);
       console.log(data3);
       for (let i in data3) {
 
@@ -209,7 +215,7 @@ class Play extends Component {
 
         if (result) {
           console.log('Success, song file aquired in search song');
-          console.log(song_name + ' by ' + song_artist + " is equal to " + song_from_api__filtered + " by " + data2[i]['artist']['name'] );
+          console.log(song_name + ' by ' + song_artist + " is equal to " + song_from_api__filtered + " by " + data3[i]['artist']['name'] );
           this.setState({ 'mp3': data3[i]['preview'] });
           break;
         }

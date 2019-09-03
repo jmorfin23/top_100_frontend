@@ -32,8 +32,12 @@ class Songs extends Component {
   render() {
   return (
     <div className="songs">
-      <h1>Top 100 Billboard List:</h1>
+      <div className="row">
+        <div className="col-md-8 offset-md-2 col-sm-8 offset-sm-2 col-10 offset-1">
+      <h1 id="centered">Top 100 Billboard List:</h1>
       <SongTable num={this.state.num} song_list={this.state.song_list}/>
+    </div>
+    </div>
     </div>
   );
 }
